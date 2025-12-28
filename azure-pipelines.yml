@@ -1,0 +1,29 @@
+# My Pipeline for Dev and Prod Environment
+
+trigger: none
+
+parameters:
+  - name: Environment
+    displayName: "Select the Environment"
+    values:
+      - dev
+      - prod
+
+############################
+# STAGE 1: PRE-COMMIT
+############################
+
+stages:
+  - stage: Pre-Commit
+    displayName: "Pre-Commit & Static Analysis"
+    jobs:
+      - job: Print
+        displayName: Print_Hello-World
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your PowerShell commands here.
+              
+              Write-Host "Hello World"
