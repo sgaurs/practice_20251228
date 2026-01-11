@@ -6,10 +6,10 @@ parameters:
   - name: environment
     displayName: "Select the Environment"
     type: string
-    default: dev
+    default: Dev
     values:
-      - dev
-      - prod
+      - Dev
+      - Prod
 
 ############################
 # STAGE 1: PRE-COMMIT
