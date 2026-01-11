@@ -3,8 +3,10 @@
 trigger: none
 
 parameters:
-  - name: Environment
+  - name: environment
     displayName: "Select the Environment"
+    type: string
+    default: dev
     values:
       - dev
       - prod
@@ -14,16 +16,30 @@ parameters:
 ############################
 
 stages:
-  - stage: Pre-Commit
-    displayName: "Pre-Commit & Static Analysis"
+  - stage: A
+    displayName: TerraformInitfmtvalplan
+    pool: Sumit-Agent-Pool
     jobs:
-      - job: Print
-        displayName: Print_Hello-World
+      - job: TerraformInitfmtvalplan_krenge
+        displayName: Terraform-Init_fmt_Val_Plan
         steps:
-        - task: PowerShell@2
+        - task: TerraformTask@5
           inputs:
-            targetType: 'inline'
-            script: |
-              # Write your PowerShell commands here.
-              
-              Write-Host "Hello World"
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Env/${{ parameters.environment }}'
+            backendServiceArm: 'SumitServConn'
+            backendAzureRmOverrideSubscriptionID: '3c36d8a3-318c-49fc-a6a2-61a324f33832'
+            backendAzureRmResourceGroupName: 'Sumit-Backend-RG'
+            backendAzureRmStorageAccountName: 'terrastatecurrentfile'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'terraform_${{ parameters.environment }}.tfstate'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Env/${{ parameters.environment }}'
+            commandOptions: '--auto-approve'
+            environmentServiceNameAzureRM: 'SumitServConn'
+            environmentAzureRmOverrideSubscriptionID: '3c36d8a3-318c-49fc-a6a2-61a324f33832'
