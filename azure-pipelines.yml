@@ -23,6 +23,9 @@ stages:
       - job: TerraformInitfmtvalplan_krenge
         displayName: Terraform-Init_fmt_Val_Plan
         steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
